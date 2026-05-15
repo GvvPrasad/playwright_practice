@@ -11,17 +11,20 @@ test('Static Web table', async ({ page }) => {
 
     // Loop through each row
     for (let i = 1; i < noofrows; i++) {
-        // Select the current row using nth(i)
-        const row = rows.nth(i);
 
         //Get all cells inside this row
-        const cells = row.locator('td');
+        const cells = await rows.nth(i).locator('td');
         const noOfColumns = await cells.count(); // number of columns in this row
+
+        let rowData: string[] = [];
 
         //Loop through each cell in the current row
         for (let j = 0; j < noOfColumns; j++) {
-            const cell = cells.nth(j); // pick the j-th cell
-            console.log(await cell.textContent());
+            const cellText = await cells.nth(j).textContent();
+            rowData.push(cellText?.trim() || '');
         }
+
+        // Display complete row data
+        console.log(`Row ${i + 1}:`, rowData);
     }
 });
